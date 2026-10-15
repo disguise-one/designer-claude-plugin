@@ -1,0 +1,61 @@
+# Tags a release after its pull request is merged.
+# The tag is named <plugin name>--v<version>. Users pin a release with it.
+name: tag
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".claude-plugin/plugin.json"
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find the tag name
+        id: tag
+        run: |
+          python - <<'EOF'
+          import json, os
+          with open(".claude-plugin/plugin.json", encoding="utf-8") as f:
+              manifest = json.load(f)
+          name = "%s--v%s" % (manifest["name"], manifest["version"])
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write("name=%s\n" % name)
+          EOF
+
+      - name: Check if the tag exists
+        id: exists
+        env:
+          TAG: ${{ steps.tag.outputs.name }}
+        run: |
+          if git rev-parse -q --verify "refs/tags/$TAG" > /dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "The tag $TAG exists. Nothing to do."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.exists.outputs.exists == 'false'
+        with:
+          node-version: "22"
+
+      - name: Install Claude Code
+        if: steps.exists.outputs.exists == 'false'
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Tag the release
+        if: steps.exists.outputs.exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          claude plugin tag --push -m "disguise-designer %s"
