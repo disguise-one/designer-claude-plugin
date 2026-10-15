@@ -70,7 +70,7 @@ def strip_allowed_tools(data):
             "SKILL.md frontmatter must have exactly one 'allowed-tools:' "
             "line. Found %d. The sync cannot continue." % len(hits))
     i = hits[0]
-    if i + 1 < end and lines[i + 1][:1] in (b" ", b"\t"):
+    if i + 1 < end and lines[i + 1][:1] in (b" ", b"\t", b"-"):
         raise SyncError(
             "The 'allowed-tools:' value in SKILL.md goes over more than one "
             "line. The sync removes one line only. Change the sync script.")
@@ -177,10 +177,18 @@ def write_tree(files, manifest, repo):
         with open(new_manifest, "wb") as f:
             f.write(manifest)
         os.makedirs(skills_dir, exist_ok=True)
+        moved_old = False
         if os.path.isdir(target):
             os.replace(target, old)
-        os.replace(new_skill, target)
-        os.replace(new_manifest, os.path.join(repo, MANIFEST_NAME))
+            moved_old = True
+        try:
+            os.replace(new_skill, target)
+            os.replace(new_manifest, os.path.join(repo, MANIFEST_NAME))
+        except OSError:
+            # Put the old copy back. Do not leave the plugin with no skill.
+            if moved_old and not os.path.isdir(target):
+                os.replace(old, target)
+            raise
     finally:
         shutil.rmtree(work, ignore_errors=True)
 

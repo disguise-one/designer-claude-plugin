@@ -40,6 +40,7 @@ jobs:
           repository: disguise-one/d3
           ref: ${{ inputs.d3_ref }}
           token: ${{ secrets.D3_READ_TOKEN }}
+          persist-credentials: false
           path: .d3-source
           sparse-checkout: skills
           sparse-checkout-cone-mode: true

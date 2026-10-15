@@ -171,10 +171,41 @@ class SyncTests(Base):
         with self.assertRaises(sync_skill.SyncError):
             self.run_main()
 
+    def test_yaml_list_after_the_key_is_an_error(self):
+        data = skill_md(self.eol).replace(
+            ALLOWED + self.eol,
+            b"allowed-tools:" + self.eol + b"- Bash" + self.eol)
+        self.write_d3("SKILL.md", data)
+        with self.assertRaises(sync_skill.SyncError):
+            self.run_main()
+
     def test_missing_d3_skill_is_an_error(self):
         shutil.rmtree(self.skill_dir)
         with self.assertRaises(sync_skill.SyncError):
             self.run_main()
+
+    def test_failed_swap_keeps_the_old_copy(self):
+        self.run_main()
+        before = self.read_plugin("SKILL.md")
+        self.write_d3("references/a.md", b"changed\r\n")
+        real_replace = os.replace
+        calls = []
+
+        def fail_second(src, dst):
+            calls.append((src, dst))
+            if len(calls) == 2:
+                raise OSError("simulated failure")
+            return real_replace(src, dst)
+
+        os.replace = fail_second
+        try:
+            with self.assertRaises(OSError):
+                self.run_main()
+        finally:
+            os.replace = real_replace
+        self.assertEqual(before, self.read_plugin("SKILL.md"))
+        self.assertEqual(b"Line one\r\nLine two\n",
+                         self.read_plugin("references/a.md"))
 
 
 class CheckTests(Base):
