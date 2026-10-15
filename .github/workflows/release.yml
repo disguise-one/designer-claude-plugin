@@ -34,12 +34,22 @@ jobs:
       - name: Check out this repository
         uses: actions/checkout@v4
 
+      # A short-lived token that can read disguise-one/d3 and nothing else.
+      - name: Get a read token for d3
+        id: d3-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.D3_APP_ID }}
+          private-key: ${{ secrets.D3_APP_PRIVATE_KEY }}
+          owner: disguise-one
+          repositories: d3
+
       - name: Check out the d3 skills folder
         uses: actions/checkout@v4
         with:
           repository: disguise-one/d3
           ref: ${{ inputs.d3_ref }}
-          token: ${{ secrets.D3_READ_TOKEN }}
+          token: ${{ steps.d3-token.outputs.token }}
           persist-credentials: false
           path: .d3-source
           sparse-checkout: skills
