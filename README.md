@@ -80,13 +80,21 @@ It covers:
 
 The plugin version is the Designer release number. For example, Designer release `r34.0.1` gives plugin version `34.0.1`.
 
+A Designer release is a manual checklist. It is not one CI action. The plugin release follows it in two parts:
+
+- **When the Designer release tag goes up:** the `release` workflow opens a pull request. The pull request stays open.
+- **On release day, when the Designer release comes out:** a person merges the pull request. Do not merge it before. A release can be held back after its tag is made.
+
 A release takes these steps:
 
-1. The `release` workflow starts. A person starts it by hand today. Designer CI starts it when a Designer release is finished (see `docs/designer-ci-hook.md`; not applied yet). Its inputs are the version and the `d3` ref (a branch, tag or commit of `disguise-one/d3`).
+1. The `release` workflow starts. A person starts it by hand today. Designer CI will start it when the release tag goes up (see `docs/designer-ci-hook.md`; not applied yet). Its inputs are the version and the `d3` ref. For a release, the ref is the tag `release/r<version>` of `disguise-one/d3`.
 2. The workflow copies `skills/d3-designer` from that `d3` ref, removes the `allowed-tools` line, writes `skills-manifest.json` and sets `version` in `.claude-plugin/plugin.json`.
 3. The workflow runs the unit tests, the manifest check and `claude plugin validate`.
-4. The workflow opens a pull request named `Release <version>: sync d3-designer skill`. A person reads it and merges it with a merge commit.
-5. The `tag` workflow runs when `plugin.json` changes on `main`. It makes and pushes the tag `disguise-designer--v<version>`. A person can also start it by hand.
+4. The workflow opens a pull request named `Release <version>: sync d3-designer skill`. A person reads it.
+5. On release day, a person merges the pull request with a merge commit.
+6. The `tag` workflow runs when `plugin.json` changes on `main`. It makes and pushes the tag `disguise-designer--v<version>`. A person can also start it by hand.
+
+If a release is held back and a new tag is made, close the old pull request. The new tag opens a new one.
 
 To make a release by hand, run this in a clone of the repository:
 
