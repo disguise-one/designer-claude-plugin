@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "designer": {
+      "type": "http",
+      "url": "http://${user_config.designer_address}/api/mcp/rpc"
+    }
+  }
+}

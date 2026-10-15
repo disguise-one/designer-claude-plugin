@@ -1,0 +1,12 @@
+{
+  "hostname": "MY-MACHINE",
+  "installations": {
+    "main": {
+      "root": "%USERPROFILE%\\d3-builds\\main",
+      "exeSubpath": "build\\msvc"
+    },
+    "other": {
+      "root": "%USERPROFILE%\\d3-builds\\other"
+    }
+  }
+}

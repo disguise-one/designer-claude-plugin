@@ -1,0 +1,110 @@
+# Release workflow for a Designer release.
+# It copies the d3-designer skill from disguise-one/d3 and opens a pull request.
+# It does not push to main. It does not make a tag.
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      d3_ref:
+        description: "Branch, tag or SHA of disguise-one/d3"
+        required: true
+        default: "wrap/next"
+      version:
+        description: "Designer release number, for example 34.0.0"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the version input
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if ! printf '%s' "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "version must look like 34.0.0" >&2
+            exit 1
+          fi
+
+      - name: Check out this repository
+        uses: actions/checkout@v4
+
+      - name: Check out the d3 skills folder
+        uses: actions/checkout@v4
+        with:
+          repository: disguise-one/d3
+          ref: ${{ inputs.d3_ref }}
+          token: ${{ secrets.D3_READ_TOKEN }}
+          path: .d3-source
+          sparse-checkout: skills
+          sparse-checkout-cone-mode: true
+          # Full history is not needed. The sync reads HEAD only.
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Sync the skill
+        run: python scripts/sync_skill.py --d3 .d3-source
+
+      - name: Set the plugin version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          python - <<'EOF'
+          import os, re
+          path = ".claude-plugin/plugin.json"
+          with open(path, "rb") as f:
+              text = f.read().decode("utf-8")
+          new, count = re.subn(
+              r'("version"\s*:\s*")[^"]*(")',
+              lambda m: m.group(1) + os.environ["VERSION"] + m.group(2),
+              text, count=1)
+          if count != 1:
+              raise SystemExit("version field not found in " + path)
+          with open(path, "wb") as f:
+              f.write(new.encode("utf-8"))
+          EOF
+
+      - name: Unit tests
+        run: python -m unittest discover -s scripts
+
+      - name: Manifest matches the files in skills/
+        run: python scripts/sync_skill.py --verify-manifest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Validate the plugin
+        run: claude plugin validate .
+
+      - name: Open a pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: release/${{ inputs.version }}
+          base: main
+          title: "Release ${{ inputs.version }}: sync d3-designer skill"
+          commit-message: "Release ${{ inputs.version }}: sync d3-designer skill from d3 ${{ inputs.d3_ref }}"
+          body: |
+            This pull request was made by the release workflow.
+
+            - Designer version: ${{ inputs.version }}
+            - d3 ref: `${{ inputs.d3_ref }}`
+            - The d3 commit is in `skills-manifest.json`.
+
+            The skill files are generated. Do not edit them by hand.
+            Tag the release after this pull request is merged.
+          add-paths: |
+            skills/
+            skills-manifest.json
+            .claude-plugin/plugin.json

@@ -1,0 +1,202 @@
+{
+  "d3_commit": "52cf5e8bee65198d703dbc2d0396a08d2032cdbf",
+  "files": [
+    {
+      "path": "SKILL.md",
+      "sha256": "18cd525ee3015bad120d927765464cfcb199fa77316c2013ae302ee7b6ae2193",
+      "size": 18548
+    },
+    {
+      "path": "references/apis.md",
+      "sha256": "527321c5dde210ae6df160458d7054ea325a849b49736c75bd41edb6cda004f9",
+      "size": 4531
+    },
+    {
+      "path": "references/audio.md",
+      "sha256": "277f596c3f4f2122e9d646ff4af88fe1336a67d8b6af98ca7c6dba979658edb5",
+      "size": 4667
+    },
+    {
+      "path": "references/blender-meshes.md",
+      "sha256": "6b779eab65cf601e6b07332180b20aed5fc6f14f99c80298632134574fc3a698",
+      "size": 6311
+    },
+    {
+      "path": "references/colour.md",
+      "sha256": "ade478da8f786125debc7d9d53f80fee8aec9164e472a127af0483d38e5842aa",
+      "size": 8303
+    },
+    {
+      "path": "references/content-media.md",
+      "sha256": "fdd58b5c4ce59c507593e8ec21a4f332576743fafa6e5f2a14721406ae7c018d",
+      "size": 8041
+    },
+    {
+      "path": "references/d3manager.md",
+      "sha256": "6781ea9a4d0083cc991baa61b2597df70a509026f0543c6dc584f298cca078e3",
+      "size": 9972
+    },
+    {
+      "path": "references/devices-control.md",
+      "sha256": "8615eb6df8015b4d014d9cd3ad08e56cd881f10b3997bb25714214224c36fbbb",
+      "size": 9757
+    },
+    {
+      "path": "references/expressions.md",
+      "sha256": "3de75f3fadb828d5f26bd6fe0b2a1a09c684f8c390b76541b3006bb0f254a2d5",
+      "size": 6981
+    },
+    {
+      "path": "references/feeds-outputs.md",
+      "sha256": "620b7d1f1046e290aeb2e9f1e0d2104d09d041254d457bcd8ec4aee3b74be026",
+      "size": 6209
+    },
+    {
+      "path": "references/genlock.md",
+      "sha256": "e33c18b8f72e9aaa1f0352f4ae77009af335f234c6a05cbdc1052dc8d1074318",
+      "size": 3781
+    },
+    {
+      "path": "references/getting-started.md",
+      "sha256": "8dddd630e8eae1c70ec8716850259530f09847a5eeba7f812e87d6d26f436b8c",
+      "size": 8228
+    },
+    {
+      "path": "references/gui-editor.md",
+      "sha256": "52be5d1cc4d0c2f7bcf598c0a613053caffe87b769aaaf6238196803868f5d74",
+      "size": 5498
+    },
+    {
+      "path": "references/layers-modules.md",
+      "sha256": "c2ae1b3e0c15f4698494305354832b5c87076bf0789fb0d0ffd3db805f8594a6",
+      "size": 19351
+    },
+    {
+      "path": "references/lighting-rendering.md",
+      "sha256": "a225217a3522ebb3ef15cde977e2055bf29b2c55498af03c15c5e83735f0fe91",
+      "size": 6706
+    },
+    {
+      "path": "references/mcp-capabilities.md",
+      "sha256": "e856a1ac0b1073a3900196d0c48dadc040fe00cae3d315d811710f95d8a4ea5a",
+      "size": 8463
+    },
+    {
+      "path": "references/networking.md",
+      "sha256": "887a68c422b3d67ce0b95dfefdd86236314f7312434cb84ce4f9b8d5d0391128",
+      "size": 6143
+    },
+    {
+      "path": "references/plugins.md",
+      "sha256": "8af3e006bcf1d92f0fda45dad7e130b62cae2bf8df89b99c4b93bd5fbbbfd1fb",
+      "size": 8262
+    },
+    {
+      "path": "references/renderstream.md",
+      "sha256": "bf4642a64ba9b4ae80eb53360968bea2e539692c57303f9aca74f3912c526719",
+      "size": 7100
+    },
+    {
+      "path": "references/resources.md",
+      "sha256": "ae46d12c05dc26cf5096d1fc5697816c3b280ad510cff0f36b0fff66477639c8",
+      "size": 7173
+    },
+    {
+      "path": "references/stage-projection.md",
+      "sha256": "abd8161ac236595752b6600ea8e623db554afc170b1fc83f209edd6bec5807b9",
+      "size": 28577
+    },
+    {
+      "path": "references/subsystems.md",
+      "sha256": "203a8b5b80e294d63594a921c7d757168c4c3cc2cdbf1f226792ce218003fd47",
+      "size": 5272
+    },
+    {
+      "path": "references/timeline.md",
+      "sha256": "983274506592817009a2d8c2b8fd539fe1c42d35f2f13453b9ce6b28b42ab341",
+      "size": 12426
+    },
+    {
+      "path": "references/tracking.md",
+      "sha256": "59490251cf04949e56c176bda70caaad550f16554367ad47e3e9bca546b40448",
+      "size": 8911
+    },
+    {
+      "path": "references/video-input.md",
+      "sha256": "58093f96a169e6a9f1be907ad87fb80a87b20beed5cff1c5af75ed2aa255b5e3",
+      "size": 8839
+    },
+    {
+      "path": "references/visual-verification.md",
+      "sha256": "3f5477fcd80633f03be804dcb3cb6dfdcdbeea575ae6e76c06edd162e8ddfc22",
+      "size": 6224
+    },
+    {
+      "path": "references/workflows-general.md",
+      "sha256": "c38a974f1c3b86e677b77d4a00c6d2ad23b09e0ceeecac1098e27e705d2d4fd0",
+      "size": 8014
+    },
+    {
+      "path": "references/workflows-vp.md",
+      "sha256": "1b2e32d24da9fd356681b41d0db90d3e875cf6695ebb0cf896b03c1baea0d7d0",
+      "size": 6463
+    },
+    {
+      "path": "scripts/config.example.json",
+      "sha256": "094cd0df8db8c86a417801fa3e1db96660c5f008232bcd18cbee7a5dc1fea72c",
+      "size": 241
+    },
+    {
+      "path": "scripts/d3-capture-frame.ps1",
+      "sha256": "8006f0fe03b86a7dfb49457eafd2baf59fc0f9ba80750f96cfefe20e00051eae",
+      "size": 2596
+    },
+    {
+      "path": "scripts/d3-capture-lineup.ps1",
+      "sha256": "9e2f4b1ac45d93301792aa978abf4ff6f6dc265bcdef98c132e3f6120cc4e294",
+      "size": 7747
+    },
+    {
+      "path": "scripts/d3-common.ps1",
+      "sha256": "42ba0fda55b5f062cb87deb9e3363083ad9b7b273f69374e212ac033b635b5c9",
+      "size": 9606
+    },
+    {
+      "path": "scripts/d3-designer.ps1",
+      "sha256": "e2597f9c16079c679d263c15a0c1e62215c2833183cf6df990e166c999551537",
+      "size": 11817
+    },
+    {
+      "path": "scripts/d3-pyi-lookup.py",
+      "sha256": "c47fd79f78fab9b3cdca743cd78c63588f3f1eae692ab87e4fa2676277ab9244",
+      "size": 20554
+    },
+    {
+      "path": "scripts/d3-python-common.ps1",
+      "sha256": "f8fbdc03a21514dea59d5be604edeeba17af3a941a8b635a8a2537d9f965e701",
+      "size": 2937
+    },
+    {
+      "path": "scripts/d3-ref.py",
+      "sha256": "6846bdcd2548e7e895327f965e497b77788154f9fc762f046770aa132cb0a11c",
+      "size": 6185
+    },
+    {
+      "path": "scripts/d3-service.ps1",
+      "sha256": "fb7354176595ddde6cd6ca56500b4235d98ae986b6659c949387ec22135a089d",
+      "size": 6640
+    },
+    {
+      "path": "scripts/fetch_d3_pyi.py",
+      "sha256": "61dd85da5f8ebbfd1a2e130751a2647756fc20a33e33fd708995a812167fe362",
+      "size": 1680
+    },
+    {
+      "path": "scripts/mcp_helpers.py",
+      "sha256": "c47a41d98656a33e2e06325faa1bdecf5b6ff092d4c8e801464fb23d55cad4b5",
+      "size": 14933
+    }
+  ],
+  "skill": "d3-designer",
+  "skill_md_d3_sha256": "450c039b14f18044683e317896de28a1f5a67ea516bc297a9a11bf8e8bf4e193"
+}

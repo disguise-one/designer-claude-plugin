@@ -1,0 +1,14 @@
+{
+  "name": "disguise",
+  "owner": { "name": "disguise" },
+  "metadata": {
+    "description": "Official disguise plugins for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "disguise-designer",
+      "source": "./",
+      "description": "Control and automate disguise Designer projects from Claude Code with the d3-designer skill and the Designer MCP server."
+    }
+  ]
+}
