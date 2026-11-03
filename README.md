@@ -110,4 +110,3 @@ Users get a release only when `version` changes. Never change the plugin `name`.
 
 - Claude Code does not load skills from MCP servers yet. For this reason, the plugin has its own copy of the skill.
 - The skill copy is generated from `skills/d3-designer` in `disguise-one/d3`. Do not edit it here.
-- This repository is private until release.
