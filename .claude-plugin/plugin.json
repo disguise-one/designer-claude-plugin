@@ -6,7 +6,7 @@
   "author": { "name": "disguise" },
   "homepage": "https://developer.disguise.one/api/mcp-server",
   "repository": "https://github.com/disguise-one/designer-claude-plugin",
-  "license": "LicenseRef-disguise-proprietary",
+  "license": "MIT",
   "userConfig": {
     "designer_address": {
       "type": "string",
