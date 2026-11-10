@@ -9,6 +9,9 @@ removed from the SKILL.md frontmatter. A plugin MCP server has tool names
 like mcp__plugin_<plugin>_<server>__<tool>. The d3 value mcp__d3service__*
 does not match them.
 
+The sync stops if a text file has CRLF line ends or a UTF-8 byte-order mark.
+The plugin directory refuses these files. Fix them in d3.
+
 Usage:
   python scripts/sync_skill.py --d3 <d3 checkout>                 sync
   python scripts/sync_skill.py --d3 <d3 checkout> --check         no changes;
@@ -33,6 +36,10 @@ MANIFEST_NAME = "skills-manifest.json"
 REMOVED_KEY = b"allowed-tools:"
 SKIP_DIRS = {"__pycache__"}
 SKIP_SUFFIXES = (".pyc",)
+# The plugin directory refuses text files with CRLF line ends or a
+# byte-order mark. The sync checks files with these suffixes.
+TEXT_SUFFIXES = (".md", ".json", ".py", ".ps1")
+BOM = b"\xef\xbb\xbf"
 
 _LINE = re.compile(rb"[^\n]*\n|[^\n]+")
 
@@ -76,6 +83,23 @@ def strip_allowed_tools(data):
             "line. The sync removes one line only. Change the sync script.")
     del lines[i]
     return b"".join(lines)
+
+
+def check_text_format(files):
+    """Raise SyncError if a text file has CRLF line ends or a BOM."""
+    problems = []
+    for rel in sorted(files):
+        if not rel.endswith(TEXT_SUFFIXES):
+            continue
+        if files[rel].startswith(BOM):
+            problems.append("%s starts with a UTF-8 byte-order mark" % rel)
+        if b"\r\n" in files[rel]:
+            problems.append("%s has CRLF line ends" % rel)
+    if problems:
+        raise SyncError(
+            "The plugin directory needs UTF-8 text with LF line ends and no "
+            "byte-order mark. Fix the files in d3 (see the d3 .gitattributes "
+            "rule for skills/):\n  " + "\n  ".join(problems))
 
 
 def list_files(root):
@@ -132,6 +156,7 @@ def build_expected(d3):
         files[rel] = read_bytes(os.path.join(source, *rel.split("/")))
     if "SKILL.md" not in files:
         raise SyncError("SKILL.md is missing in %s" % source)
+    check_text_format(files)
     d3_digest = sha256_hex(files["SKILL.md"])
     files["SKILL.md"] = strip_allowed_tools(files["SKILL.md"])
     manifest = manifest_bytes(files, d3_commit(d3), d3_digest)
