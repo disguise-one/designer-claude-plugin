@@ -4,9 +4,26 @@
   "version": "34.0.0",
   "description": "Control and automate disguise Designer projects from Claude Code with the d3-designer skill and the Designer MCP server.",
   "author": { "name": "disguise" },
-  "homepage": "https://developer.disguise.one/api/mcp-server",
+  "homepage": "https://www.disguise.one",
   "repository": "https://github.com/disguise-one/designer-claude-plugin",
+  "documentationUrl": "https://help.disguise.one",
+  "supportUrl": "https://support.disguise.one",
+  "privacyPolicyUrl": "https://www.disguise.one/en/privacy",
+  "termsOfServiceUrl": "https://www.disguise.one/en/terms-and-conditions",
   "license": "MIT",
+  "keywords": [
+    "disguise",
+    "designer",
+    "d3",
+    "media server",
+    "show control",
+    "live events",
+    "projection mapping",
+    "led",
+    "virtual production",
+    "xr",
+    "mcp"
+  ],
   "userConfig": {
     "designer_address": {
       "type": "string",
