@@ -39,7 +39,7 @@ def sha(data):
 
 
 class Base(unittest.TestCase):
-    eol = b"\r\n"
+    eol = b"\n"
 
     def setUp(self):
         self.tmp = tempfile.mkdtemp(prefix="sync_skill_test_")
@@ -49,8 +49,8 @@ class Base(unittest.TestCase):
         os.makedirs(self.repo)
         self.skill_dir = os.path.join(self.d3, "skills", "d3-designer")
         self.write_d3("SKILL.md", skill_md(self.eol))
-        self.write_d3("references/a.md", b"Line one\r\nLine two\n")
-        self.write_d3("scripts/run.ps1", b"Write-Host 'hi'\r\n")
+        self.write_d3("references/a.md", b"Line one\nLine two\n")
+        self.write_d3("scripts/run.ps1", b"Write-Host 'hi'\n")
         self.write_d3("references/data.bin", bytes(range(256)))
         self.git("init", "-q")
         self.git("add", "-A")
@@ -95,20 +95,44 @@ class SyncTests(Base):
         expected = skill_md(self.eol).replace(ALLOWED + self.eol, b"")
         self.assertEqual(self.read_plugin("SKILL.md"), expected)
 
-    def test_lf_line_ending_is_kept(self):
-        self.write_d3("SKILL.md", skill_md(b"\n"))
-        self.run_main()
-        expected = skill_md(b"\n").replace(ALLOWED + b"\n", b"")
-        self.assertEqual(self.read_plugin("SKILL.md"), expected)
+    # The plugin directory refuses a skill file that has CRLF line ends or
+    # a byte-order mark. The sync stops before it writes, so the d3 source
+    # gets the fix.
+    def test_crlf_in_skill_md_is_an_error(self):
+        self.write_d3("SKILL.md", skill_md(b"\r\n"))
+        with self.assertRaises(sync_skill.SyncError) as ctx:
+            self.run_main()
+        self.assertIn("CRLF", str(ctx.exception))
+        self.assertIn("SKILL.md", str(ctx.exception))
+        self.assertFalse(os.path.exists(os.path.join(self.repo, "skills")))
+
+    def test_crlf_in_other_text_file_is_an_error(self):
+        self.write_d3("scripts/run.ps1", b"Write-Host 'hi'\r\n")
+        with self.assertRaises(sync_skill.SyncError) as ctx:
+            self.run_main()
+        self.assertIn("scripts/run.ps1", str(ctx.exception))
+
+    def test_bom_is_an_error(self):
+        self.write_d3("references/a.md", b"\xef\xbb\xbfLine one\n")
+        with self.assertRaises(sync_skill.SyncError) as ctx:
+            self.run_main()
+        self.assertIn("byte-order mark", str(ctx.exception))
+        self.assertIn("references/a.md", str(ctx.exception))
+
+    def test_crlf_in_binary_file_is_kept(self):
+        self.write_d3("references/data.bin", b"\x00\r\n\x01")
+        self.assertEqual(self.run_main(), 0)
+        self.assertEqual(self.read_plugin("references/data.bin"),
+                         b"\x00\r\n\x01")
 
     def test_other_files_are_byte_identical(self):
         self.run_main()
         self.assertEqual(self.read_plugin("references/a.md"),
-                         b"Line one\r\nLine two\n")
+                         b"Line one\nLine two\n")
         self.assertEqual(self.read_plugin("references/data.bin"),
                          bytes(range(256)))
         self.assertEqual(self.read_plugin("scripts/run.ps1"),
-                         b"Write-Host 'hi'\r\n")
+                         b"Write-Host 'hi'\n")
 
     def test_file_removed_in_d3_is_removed_in_plugin(self):
         self.run_main()
@@ -187,7 +211,7 @@ class SyncTests(Base):
     def test_failed_swap_keeps_the_old_copy(self):
         self.run_main()
         before = self.read_plugin("SKILL.md")
-        self.write_d3("references/a.md", b"changed\r\n")
+        self.write_d3("references/a.md", b"changed\n")
         real_replace = os.replace
         calls = []
 
@@ -204,7 +228,7 @@ class SyncTests(Base):
         finally:
             os.replace = real_replace
         self.assertEqual(before, self.read_plugin("SKILL.md"))
-        self.assertEqual(b"Line one\r\nLine two\n",
+        self.assertEqual(b"Line one\nLine two\n",
                          self.read_plugin("references/a.md"))
 
 
